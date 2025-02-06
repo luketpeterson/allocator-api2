@@ -3338,8 +3338,6 @@ impl<T: ?Sized, A: Allocator> Unpin for Rc<T, A> {}
 ///
 /// The pointer must point to (and have valid metadata for) a previously
 /// valid instance of T, but the T is allowed to be dropped.
-//TODO, align_of_val_raw is unstable
-#[cfg(any())]
 unsafe fn data_offset<T: ?Sized>(ptr: *const T) -> usize {
     // Align the unsized value to the end of the RcInner.
     // Because RcInner is repr(C), it will always be the last field in memory.
