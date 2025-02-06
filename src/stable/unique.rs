@@ -101,6 +101,36 @@ impl<T: ?Sized> Clone for Unique<T> {
     }
 }
 
+impl<T: ?Sized> From<&mut T> for Unique<T> {
+    /// Converts a `&mut T` to a `Unique<T>`.
+    ///
+    /// This conversion is infallible since references cannot be null.
+    #[inline]
+    fn from(reference: &mut T) -> Self {
+        Self::from(NonNull::from(reference))
+    }
+}
+
+impl<T: ?Sized> From<NonNull<T>> for Unique<T> {
+    /// Converts a `NonNull<T>` to a `Unique<T>`.
+    ///
+    /// This conversion is infallible since `NonNull` cannot be null.
+    #[inline]
+    fn from(pointer: NonNull<T>) -> Self {
+        Unique { pointer, _marker: PhantomData }
+    }
+}
+
+impl<T: ?Sized> From<Unique<T>> for NonNull<T> {
+    /// Converts a `NonNull<T>` to a `Unique<T>`.
+    ///
+    /// This conversion is infallible since `NonNull` cannot be null.
+    #[inline]
+    fn from(unique: Unique<T>) -> Self {
+        unique.pointer
+    }
+}
+
 impl<T: ?Sized> Copy for Unique<T> {}
 
 use core::{marker::PhantomData, ptr::NonNull};

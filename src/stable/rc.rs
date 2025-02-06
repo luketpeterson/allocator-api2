@@ -1408,8 +1408,6 @@ impl<T: ?Sized, A: Allocator> Rc<T, A> {
     ///     assert_eq!(&*x, &[1, 2, 3]);
     /// }
     /// ```
-    //TODO, align_of_val_raw is unstable, and this depends on it
-    #[cfg(any())]
     pub unsafe fn from_raw_in(ptr: *const T, alloc: A) -> Self {
         let offset = unsafe { data_offset(ptr) };
 
@@ -2983,8 +2981,6 @@ impl<T: ?Sized, A: Allocator> Weak<T, A> {
     /// [`upgrade`]: Weak::upgrade
     /// [`new`]: Weak::new
     #[inline]
-    //TODO, align_of_val_raw is unstable, and this depends on it
-    #[cfg(any())]
     pub unsafe fn from_raw_in(ptr: *const T, alloc: A) -> Self {
         // See Weak::as_ptr for context on how the input pointer is derived.
 

@@ -10,6 +10,22 @@
 //! loads and stores of pointers. This may be detected at compile time using
 //! `#[cfg(target_has_atomic = "ptr")]`.
 
+//Stuff normally in the prelude
+#![no_implicit_prelude]
+extern crate core;
+use core::clone::Clone;
+use core::cmp::{Eq, Ord, PartialEq, PartialOrd};
+use core::convert::{AsRef, From, Into};
+use core::default::Default;
+use core::iter::{Iterator, IntoIterator};
+use core::marker::{Sized, Sync, Send, Unpin};
+use core::mem::{drop, size_of_val};
+use core::{write, assert, panic, debug_assert, debug_assert_eq};
+use core::ops::{Drop, FnOnce};
+use core::option::Option::{self, Some, None};
+use core::result::Result::{self, Ok, Err};
+
+//Not in the prelude
 use core::any::Any;
 use core::cmp::Ordering;
 use core::convert::TryFrom;
@@ -1539,8 +1555,6 @@ impl<T: ?Sized, A: Allocator> Arc<T, A> {
     ///     assert_eq!(&*x, &[1, 2, 3]);
     /// }
     /// ```
-    //TODO, align_of_val_raw is unstable, and this depends on it
-    #[cfg(any())]
     #[inline]
     pub unsafe fn from_raw_in(ptr: *const T, alloc: A) -> Self {
         unsafe {
@@ -2672,8 +2686,6 @@ impl<T: ?Sized, A: Allocator> Weak<T, A> {
     /// [`into_raw`]: Weak::into_raw
     /// [`upgrade`]: Weak::upgrade
     #[inline]
-    //TODO, align_of_val_raw is unstable, and this depends on it
-    #[cfg(any())]
     pub unsafe fn from_raw_in(ptr: *const T, alloc: A) -> Self {
         // See Weak::as_ptr for context on how the input pointer is derived.
 
@@ -3644,8 +3656,6 @@ impl<T: ?Sized, A: Allocator> Unpin for Arc<T, A> {}
 ///
 /// The pointer must point to (and have valid metadata for) a previously
 /// valid instance of T, but the T is allowed to be dropped.
-//TODO, align_of_val_raw is unstable
-#[cfg(any())]
 unsafe fn data_offset<T: ?Sized>(ptr: *const T) -> usize {
     // Align the unsized value to the end of the ArcInner.
     // Because RcInner is repr(C), it will always be the last field in memory.

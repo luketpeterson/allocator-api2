@@ -1178,6 +1178,13 @@ impl<T: ?Sized, A: Allocator> Box<T, A> {
         (NonNull::from(Box::leak(b)), alloc)
     }
 
+    #[inline]
+    #[doc(hidden)]
+    pub(crate) fn into_unique(b: Self) -> (Unique<T>, A) {
+        let (ptr, alloc) = Box::into_raw_with_allocator(b);
+        unsafe { (Unique::from(&mut *ptr), alloc) }
+    }
+
     /// Returns a reference to the underlying allocator.
     ///
     /// Note: this is an associated function, which means that you have
