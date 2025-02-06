@@ -19,7 +19,13 @@ pub mod vec;
 mod macros;
 
 #[cfg(feature = "alloc")]
+pub mod rc;
+
+#[cfg(feature = "alloc")]
 mod slice;
+
+#[cfg(feature = "alloc")]
+pub mod sync;
 
 #[cfg(feature = "alloc")]
 mod unique;
